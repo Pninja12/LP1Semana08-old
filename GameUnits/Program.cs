@@ -2,17 +2,17 @@
 
 namespace GameUnits
 {
-    public class Unit
+    public abstract class Unit
     {
         
-            abstract float Cost { get; }
-            private int movement;
-            virtual int Health { get; }
+            public abstract float Cost { get; }
+            public int movement;
+            public virtual int Health { get; set;}
             
             public Unit (int movement , int health ) 
             {
-            this.movement = movement ;
-            Health = health ;
+                this.movement = movement ;
+                Health = health ;
             }
 
         public void Move()
@@ -21,21 +21,21 @@ namespace GameUnits
         }
     }
 
-    public class MilitaryUnit : Unit
+    public class MilitaryUnit : Unit    
     {
         public int AttackPower { get; }
         public int XP { get ; private set; }
-        public void Attack ( Unit u );
+        public void Attack ( Unit u ){}
 
-        override float Cost()
+        public override float Cost => AttackPower + XP;
+
+        public MilitaryUnit(int health, int movement, int attackPower) : base(movement, health)
         {
-            return AttackPower + XP;
+            AttackPower = attackPower;
+            XP = 0;
         }
 
-        override int Health()
-        {
-            return XP + Health;
-        }
+        public override int Health => XP + base.Health;
 
         public void Attack()
         {
@@ -46,11 +46,8 @@ namespace GameUnits
 
     public class SettlerUnit : Unit
     {
-        override float Cost()
-        {
-            return 5;
-        }
-        public Set(int health, int movement)
+        public override float Cost => 5;
+        public SettlerUnit(int health, int movement) : base(movement, health)
         {
             health = 2;
             movement = 1;
@@ -60,8 +57,10 @@ class Program
     {
         static void Main(string[] args)
         {
-            Move;
-            Console.WriteLine($"Health: {Health}\nCost: {Cost}");
+            MilitaryUnit mu = new MilitaryUnit(10, 2, 5);
+            MilitaryUnit mumove = new MilitaryUnit(23,4,60);
+            Console.WriteLine($"Health: {mu.Health}\nCost: {mu.Cost}");
+            Console.WriteLine($"Move: {mu.movement}");
         }
     }
 }
